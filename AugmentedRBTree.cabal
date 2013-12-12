@@ -47,7 +47,8 @@ cabal-version:       >=1.8
 
 library
   -- Modules exported by the library.
-  -- exposed-modules:     
+  hs-source-dirs:      src
+  exposed-modules:     Data.Tree.AugmentedRBTree
   
   -- Modules included in this library but not exported.
   -- other-modules:       
