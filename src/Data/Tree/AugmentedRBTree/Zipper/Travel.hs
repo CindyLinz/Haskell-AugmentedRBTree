@@ -18,7 +18,11 @@ import Data.Tree.AugmentedRBTree.Zipper
 
 -- | Move the zipper up, without checking
 partialUpZipper :: Zipper v a -> Zipper v a
-partialUpZipper (Zipper _ (Step _ t : ss)) = Zipper t ss
+partialUpZipper (Zipper curr (Step d (Branch c v a l r) : ss)) = Zipper (Branch c v a l' r') ss
+  where
+    (l', r') = case d of
+      GoLeft -> (curr, r)
+      GoRight -> (l, curr)
 
 -- | Move the zipper, with checking
 upZipper :: Zipper v a -> Maybe (Zipper v a)
