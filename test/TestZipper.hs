@@ -4,6 +4,7 @@ import System.Exit (exitFailure, exitSuccess)
 
 import Data.Tree.AugmentedRBTree.Tree
 import Data.Tree.AugmentedRBTree.Zipper
+import Data.Tree.AugmentedRBTree.Zipper.Travel
 
 dumpTree :: Show a => Tree v a -> String
 dumpTree t = go 0 t where
