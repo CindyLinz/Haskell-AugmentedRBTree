@@ -84,13 +84,13 @@ backLastRightZipper' z@(Zipper _ (Step dir _ : _)) =
 --   The caller is responsible to make sure the original zipper is on a branch node.
 mostDownLeftBranchZipper :: Zipper v a -> Zipper v a
 mostDownLeftBranchZipper z@(Zipper (Branch _ _ _ Leave _) _) = z
-mostDownLeftBranchZipper (Zipper t@(Branch _ _ _ t1 _) ss) = Zipper t1 (Step dirLeft t : ss)
+mostDownLeftBranchZipper (Zipper t@(Branch _ _ _ t1 _) ss) = mostDownLeftBranchZipper (Zipper t1 (Step dirLeft t : ss))
 
 -- | Move the zipper from a branch node to the most down-right branch node.
 --   The caller is responsible to make sure the original zipper is on a branch.
 mostDownRightBranchZipper :: Zipper v a -> Zipper v a
 mostDownRightBranchZipper z@(Zipper (Branch _ _ _ _ Leave) _) = z
-mostDownRightBranchZipper (Zipper t@(Branch _ _ _ _ t1) ss) = Zipper t1 (Step dirRight t : ss)
+mostDownRightBranchZipper (Zipper t@(Branch _ _ _ _ t1) ss) = mostDownRightBranchZipper (Zipper t1 (Step dirRight t : ss))
 
 -- | Move a zipper from a branch node to the next branch node.
 --   The caller is responsible to make sure the original zipper is on a branch node.
