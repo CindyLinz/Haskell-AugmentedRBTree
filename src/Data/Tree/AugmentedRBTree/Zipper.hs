@@ -1,15 +1,17 @@
-module Data.Tree.AugmentedRBTree.Zipper
-  ( Zipper (Zipper)
-  , Dir (GoLeft, GoRight)
-  , Step (Step)
-  , initZipper
-  ) where
+module Data.Tree.AugmentedRBTree.Zipper where
 
+import Data.Word (Word8)
 import Data.Tree.AugmentedRBTree.Tree
 
-data Dir = GoLeft | GoRight
-data Step v a = Step !Dir (Tree v a)
-data Zipper v a = Zipper (Tree v a) ![Step v a]
+newtype Dir = Dir Word8 deriving Eq
+dirLeft = Dir 1
+dirRight = Dir 2
+
+instance Show Dir where
+  show d = if d == dirLeft then "<-" else "->"
+
+data Step v a = Step {-# UNPACK #-} !Dir (Tree v a) deriving Show
+data Zipper v a = Zipper (Tree v a) ![Step v a] deriving Show
 
 -- | Get a zipper on the root node
 initZipper :: Tree v a -> Zipper v a
