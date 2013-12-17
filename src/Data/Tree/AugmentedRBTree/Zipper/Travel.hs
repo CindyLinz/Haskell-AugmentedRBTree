@@ -80,6 +80,11 @@ backLastRightZipper' z@(Zipper _ (Step dir _ : _)) =
     else backLastRightZipper' upper
   where upper = partialUpZipper' z
 
+-- | Move the zipper back to the root
+mostUpZipper :: Augment v a => Zipper v a -> Zipper v a
+mostUpZipper z@(Zipper _ []) = z
+mostUpZipper z = mostUpZipper $ partialUpZipper z
+
 -- | Move the zipper from a branch node to the most down-left branch node.
 --   The caller is responsible to make sure the original zipper is on a branch node.
 mostDownLeftBranchZipper :: Zipper v a -> Zipper v a

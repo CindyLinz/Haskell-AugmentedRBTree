@@ -6,6 +6,7 @@ import Data.Ord (Ord)
 
 import Data.Tree.AugmentedRBTree.Augment
 import Data.Tree.AugmentedRBTree.Tree
+import Data.Tree.AugmentedRBTree.Tree.Modify
 import Data.Tree.AugmentedRBTree.Tree.Check
 import Data.Tree.AugmentedRBTree.Zipper
 import Data.Tree.AugmentedRBTree.Zipper.Modify
