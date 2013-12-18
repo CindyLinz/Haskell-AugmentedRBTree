@@ -18,6 +18,8 @@ lateInsertStage :: Augment v a => a -> Zipper v a -> Tree v a
 lateInsertStage a z = tree where
   Zipper tree _ = mostUpZipper $ insertZipper a z
 
+-- | Insert the given value into the tree.
+--   If there're already equal values, insert the new one before them.
 insertBefore :: (Ord a, Augment v a) => a -> Tree v a -> Tree v a
 insertBefore a t =
   let
@@ -31,6 +33,8 @@ insertBefore a t =
   in
     lateInsertStage a z2
 
+-- | Insert the given value into the tree.
+--   If there're already equal values, insert the new one after them.
 insertAfter :: (Ord a, Augment v a) => a -> Tree v a -> Tree v a
 insertAfter a t =
   let
