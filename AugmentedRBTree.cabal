@@ -63,3 +63,12 @@ Test-Suite zipper-travel
                      , src
   build-depends:       base ==4.6.*
                      , Cabal >=1.8
+  
+Test-Suite insert
+  type:                exitcode-stdio-1.0
+  main-is:             TestInsert.hs
+  hs-source-dirs:      test
+                     , src
+  build-depends:       base ==4.6.*
+                     , Cabal >=1.8
+                     , QuickCheck ==2.6.*

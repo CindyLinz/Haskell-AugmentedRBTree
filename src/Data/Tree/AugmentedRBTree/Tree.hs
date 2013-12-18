@@ -43,3 +43,16 @@ branch c a l r = Branch c (buildAugment l a r) a l r
 -- | Build the augment from one node value and other two nodes (should be the two children in general)
 buildAugment :: Augment v a => Tree v a -> a -> Tree v a -> v
 buildAugment l a r = build (augment l) a (augment r)
+
+-- | Create an empty tree
+empty :: Tree v a
+empty = leave
+
+-- | Create a tree with only one value
+singleton :: Augment v a => a -> Tree v a
+singleton a = branch black a leave leave
+
+-- | Create a tree from ordered list.
+--   The precondition is not checked
+--fromAscList :: Augment v a => [a] -> Tree v a
+--fromAscList as = fromSubtree (map singleton as) where

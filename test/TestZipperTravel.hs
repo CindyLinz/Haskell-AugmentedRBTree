@@ -3,7 +3,7 @@ module Main where
 
 import System.Exit (exitFailure, exitSuccess)
 
-import Data.Tree.AugmentedRBTree.Tree
+import Data.Tree.AugmentedRBTree.Tree hiding (empty, singleton)
 import Data.Tree.AugmentedRBTree.Zipper
 import Data.Tree.AugmentedRBTree.Zipper.Travel
 import Data.Tree.AugmentedRBTree.Augment

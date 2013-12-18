@@ -14,15 +14,16 @@ insertZipper a (Zipper _ ss) = insertFix (Zipper (branch red a leave leave) ss)
     insertFix :: Augment v a => Zipper v a -> Zipper v a
     insertFix nZ =
       let
-        Zipper n@(Branch nC nV nA nL nR) ~nS@(Step nD _ : _) = nZ
+        Zipper n@(Branch nC nV nA nL nR) nS = nZ
         pZ@(Zipper p@(Branch pC pV pA pL pR) ~pS@(Step pD _ : _)) = partialUpZipper nZ
         gZ@(Zipper g@(Branch gC gV gA gL gR) gS) = partialUpZipper pZ
-        ~u@(Branch uC uV uA uL uR) = if pD == dirLeft
+        u = if pD == dirLeft
           then gR
           else gL
+        Branch uC uV uA uL uR = u
       in case nS of
         [] -> Zipper (Branch black nV nA nL nR) nS -- case 1
-        _ -> if pC == black
+        Step nD _ : _ -> if pC == black
           then nZ -- case 2
           else if color u == red
             then -- case 3
