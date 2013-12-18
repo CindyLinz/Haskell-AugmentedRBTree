@@ -56,9 +56,9 @@ library
   -- Other library packages from which modules are imported.
   build-depends:       base ==4.6.*
   
-Test-Suite zipper
+Test-Suite zipper-travel
   type:                exitcode-stdio-1.0
-  main-is:             TestZipper.hs
+  main-is:             TestZipperTravel.hs
   hs-source-dirs:      test
                      , src
   build-depends:       base ==4.6.*
