@@ -55,6 +55,7 @@ library
   
   -- Other library packages from which modules are imported.
   build-depends:       base ==4.6.*
+                     , NoTrace
   
 Test-Suite zipper-travel
   type:                exitcode-stdio-1.0
@@ -63,12 +64,14 @@ Test-Suite zipper-travel
                      , src
   build-depends:       base ==4.6.*
                      , Cabal >=1.8
+                     , NoTrace
   
-Test-Suite insert
+Test-Suite insert-delete
   type:                exitcode-stdio-1.0
-  main-is:             TestInsert.hs
+  main-is:             TestInsertDelete.hs
   hs-source-dirs:      test
                      , src
   build-depends:       base ==4.6.*
                      , Cabal >=1.8
                      , QuickCheck ==2.6.*
+                     , NoTrace
