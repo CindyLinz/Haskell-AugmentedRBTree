@@ -17,15 +17,15 @@ insertZipper a (Zipper _ ss) = insertFix (Zipper (branch red a leave leave) ss)
     insertFix nZ =
       let
         Zipper n@(Branch nC nV nA nL nR) nS = nZ
-        pZ@(Zipper p@(Branch pC pV pA pL pR) ~pS@(Step pD _ : _)) = partialUpZipper nZ
+        pZ@(Zipper p@(Branch pC pV pA pL pR) ~pS@(Step pD _ _)) = partialUpZipper nZ
         gZ@(Zipper g@(Branch gC gV gA gL gR) gS) = partialUpZipper pZ
         u = if pD == dirLeft
           then gR
           else gL
         Branch uC uV uA uL uR = u
       in case nS of
-        [] -> Zipper (Branch black nV nA nL nR) nS -- case 1
-        Step nD _ : _ -> if pC == black
+        StepFirst -> Zipper (Branch black nV nA nL nR) nS -- case 1
+        Step nD _ _ -> if pC == black
           then nZ -- case 2
           else if color u == red
             then -- case 3
@@ -42,7 +42,7 @@ insertZipper a (Zipper _ ss) = insertFix (Zipper (branch red a leave leave) ss)
                 insertFix gZ'
             else
               let
-                case5 (Zipper n@(Branch _ nV nA nL nR) nS@(Step dirN (Branch _ pV pA pL pR) : _)) =
+                case5 (Zipper n@(Branch _ nV nA nL nR) nS@(Step dirN (Branch _ pV pA pL pR) _)) =
                   Zipper (branch black pA pL' pR') gS where
                     (pL', pR') = if dirN == dirLeft
                       then (n, branch red gA pR gR)
@@ -54,7 +54,7 @@ insertZipper a (Zipper _ ss) = insertFix (Zipper (branch red a leave leave) ss)
                       !(pL', pR') = if pD == dirLeft
                         then (pL, nL)
                         else (nR, pR)
-                    in case5 (Zipper (branch red pA pL' pR') (Step pD n : pS))
+                    in case5 (Zipper (branch red pA pL' pR') (Step pD n pS))
                   else -- case 5
                     case5 nZ
 
@@ -77,19 +77,19 @@ deleteZipper z@(Zipper (Branch c v a l r) ss) = case (l, r) of
         Zipper n nS = nZ
         Branch nC nV nA nL nR = n
         pZ@(Zipper ~p@(Branch pC pV pA pL pR) pS) = partialUpZipper nZ
-        Step nD _ : _ = nS
+        Step nD _ _ = nS
         s = if nD == dirLeft then pR else pL
         sC = color s
         Branch _ sV sA sL sR = s
       in case nS of
-        [] -> nZ -- case 1
+        StepFirst -> nZ -- case 1
         _ -> if sC == red
           then -- case 2
             let
               (pL', pR', sL', sR') = if nD == dirLeft
                 then (undefined, sL, undefined, sR)
                 else (sR, undefined, sL, undefined)
-            in tryCase3 $ Zipper n (Step nD (branch red pA pL' pR') : Step nD (branch black sA sL' sR') : pS)
+            in tryCase3 $ Zipper n (Step nD (branch red pA pL' pR') (Step nD (branch black sA sL' sR') pS))
           else
             tryCase3 nZ
           where
