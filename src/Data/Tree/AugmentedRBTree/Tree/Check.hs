@@ -1,7 +1,11 @@
+{-# LANGUAGE BangPatterns #-}
 module Data.Tree.AugmentedRBTree.Tree.Check where
 
 import Data.Tree.AugmentedRBTree.Tree
-import Data.Tree.AugmentedRBTree.Augment (Augment)
+import Data.Tree.AugmentedRBTree.Augment
+import Data.Tree.AugmentedRBTree.Zipper
+import Data.Tree.AugmentedRBTree.Zipper.Travel
+import Data.Tree.AugmentedRBTree.Zipper.Augment
 
 isRootBlack :: Tree v a -> Bool
 isRootBlack t = color t == black
@@ -62,10 +66,44 @@ isAugmentValid (Branch _ v a l r) =
   isAugmentValid l && isAugmentValid r &&
   buildAugment l a r == v
 
-isValid :: (Eq v, Ord a, Augment v a) => Tree v a -> Bool
+isAugmentLeftRangeValid :: (Eq v, Augment v a) => Tree v a -> Bool
+isAugmentLeftRangeValid Leave = True
+isAugmentLeftRangeValid t = go v start where
+  start = (mostDownLeftBranchZipper (initZipper t))
+  Zipper (Branch _ _ startA _ _) _ = start
+  v = build Nothing startA Nothing
+  go :: (Eq v, Augment v a) => v -> Zipper v a -> Bool
+  go v z = testCurrent && testRemain where
+    testCurrent = v == augmentToLeft z
+    testRemain = case nextBranchZipper z of
+      Nothing -> True
+      Just nextZ -> go nextV nextZ where
+        !nextV = build (Just v) nextA Nothing
+        Zipper (Branch _ _ nextA _ _) _ = nextZ
+
+isAugmentRightRangeValid :: (Show v, Eq v, Augment v a) => Tree v a -> Bool
+isAugmentRightRangeValid Leave = True
+isAugmentRightRangeValid t = go v start where
+  start = (mostDownRightBranchZipper (initZipper t))
+  Zipper (Branch _ _ startA _ _) _ = start
+  v = build Nothing startA Nothing
+  go :: (Show v, Eq v, Augment v a) => v -> Zipper v a -> Bool
+  go v z = testCurrent && testRemain where
+    testCurrent = if v == augmentToRight z
+      then True
+      else False
+    testRemain = case prevBranchZipper z of
+      Nothing -> True
+      Just nextZ -> go nextV nextZ where
+        !nextV = build Nothing nextA (Just v)
+        Zipper (Branch _ _ nextA _ _) _ = nextZ
+
+isValid :: (Show v, Show a, Eq v, Ord a, Augment v a) => Tree v a -> Bool
 isValid t =
   isOrdered t &&
   isAugmentValid t &&
   isBalanced t &&
   isRootBlack t &&
-  isRedValid t
+  isRedValid t &&
+  isAugmentLeftRangeValid t &&
+  isAugmentRightRangeValid t
